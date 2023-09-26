@@ -4,12 +4,11 @@
 # Можно воспользоваться анонимными функциями (лямбдами) для построения.
 
 def compose(fun1, fun2):
-    return lambda arg: fun1(fun2(arg))
+    return lambda *args: fun1(fun2(*args))
 
 
-f = compose(lambda x: x ** 2, lambda x: x + 1)
-print(f(2))  # 9
-
+f = compose(lambda x: x * x, lambda x, y, z: x + y + z)
+print(f(2, 2, 2))
 
 # 2. Curry (5 баллов)
 # Напишите функцию `curry`, которая принимает функцию `f`. `curry` должна
@@ -17,15 +16,16 @@ print(f(2))  # 9
 # аргументы также должны быть переданы в функцию `curry`.
 # Можно воспользоваться анонимными функциями (лямбдами) для построения.
 
+
 def curry(fun, *fixed_args):
     return lambda arg: fun(arg, *fixed_args)
 
 
-def add(x, y):
-    return x + y
+def add(x, y, z):
+    return x + y + z
 
 
-add_ten = curry(add, 10)
+add_ten = curry(add, 10, 20)
 print(add_ten(42))  # 52
 
 
@@ -36,7 +36,6 @@ print(add_ten(42))  # 52
 
 
 def any(check, array):
-    assert isinstance(array, list)
     for element in array:
         if check(element):
             return True
@@ -45,7 +44,7 @@ def any(check, array):
 
 
 print(any(lambda x: x % 2 == 0, [4, 9, 15]))  # True
-
+# аттрибуты лямбды
 
 # 4. All (2 балла)
 # Напишите функцию `all`, которая по переданному предикату
@@ -62,4 +61,5 @@ def all(check, array):
         return True
 
 
-print(all(lambda x: x % 2 == 0, [4, 9, 15]))  # False
+print(all(lambda x: x % 2 == 0, [4, 8]))  # False
+# for-else
