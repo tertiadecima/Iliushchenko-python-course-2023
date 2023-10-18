@@ -35,31 +35,34 @@ def digits(number):
 print(digits(31415926))
 print(digits(0))
 
-# print(functools.reduce(digits, str(12345)))
-
 # 3. Trace_if (4 балла)
 # Измените декоратор `trace` из лекции, чтобы он выводил информацию о
 # вызове функции, только если переданные аргументы удовлетворяют предикату.
 
-def checker(f):  # сам декоратор
-    predicate = lambda x: x % 2 == 0
-    @functools.wraps(f)
-    def all(*args):  # передаем предикат и аргументы на проверку
-        for element in args:
-            if not predicate(element):
-                return print('ALARM')
-        else:
-            call = ", ".join(
-                [str(a) for a in args]
-            )
-            print(f"{f.__name__}({call}) = ...")
-            ret = f(*args)
-            print(f"{f.__name__}({call}) = {ret}")
-            return ret
-    return all
+from functools import wraps
 
 
-@checker
+def checker(predicate=lambda x: x>0):  # сам декоратор
+    def decorate(f):
+        @wraps(f)
+        def wrapper(*args):  # передаем предикат и аргументы на проверку
+            for element in args:
+                if not predicate(element):
+                    print("Doesn't satisfy the predicate")
+                    return f(*args)
+            else:
+                call = ", ".join(
+                    [str(a) for a in args]
+                )
+                print(f"{f.__name__}({call}) = ...")
+                ret = f(*args)
+                print(f"{f.__name__}({call}) = {ret}")
+                return ret
+        return wrapper
+    return decorate
+
+
+@checker(lambda x: x % 2 == 0)
 def max(*args):  # рабочая ф-я под проверку
     ret = 0
     for x in args:
@@ -67,8 +70,8 @@ def max(*args):  # рабочая ф-я под проверку
     return ret
 
 
-max(4, 8, 24)
-max(4, 9, 24)
+print(max(4, 8, 24))
+print(max(4, 9, 24))
 # проверяем, что находим максимальное из положительных четных чисел
 
 # 4. N_times (4 балла)
