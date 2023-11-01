@@ -23,10 +23,7 @@ def transition_matrix(words):
         # if pair not in matrix_dict:
         #     matrix_dict[pair] = []
         # matrix_dict[pair].append(words[i + 2])
-        if pair in matrix_dict.keys():
-            matrix_dict[pair].append(words[i + 2])
-        else:
-            matrix_dict[pair] = [words[i + 2]]
+        matrix_dict[pair].append(words[i + 2])
     return matrix_dict
 
 
