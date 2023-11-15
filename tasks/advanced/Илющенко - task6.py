@@ -11,30 +11,30 @@ from collections import defaultdict
 # исходную при помощи номеров уникальных элементов.
 
 
-# def factor(entry):
-#     Factor = namedtuple('Factor', "elements levels")
-#     num = 0
-#     levels = {}
-#     elements = []
-#     for i in entry:
-#         if i not in levels:
-#             levels[i] = num
-#             elements.append(num)
-#             num += 1
-#         else:
-#             elements.append(levels[i])
-#     f = Factor(elements = elements, levels = levels)
-#     return f
-#
-#
-# f = factor(["a", "a", "b"])
-# print(f.elements)  # [0, 0, 1]
-# print(f.levels["b"])  # 1
-# print(list(f.levels.items()))  # [('a', 0), ('b', 1)]
-#
-# f = factor(["a", "b", "c", "b", "a"])
-# print(f.elements)  # [0, 1, 2, 1, 0]
-# print(list(f.levels.items()))  # [('a', 0), ('b', 1), ('c', 2)]
+def factor(entry):
+    Factor = namedtuple('Factor', "elements levels")
+    num = 0
+    levels = {}
+    elements = []
+    for i in entry:
+        if i not in levels:
+            levels[i] = num
+            elements.append(num)
+            num += 1
+        else:
+            elements.append(levels[i])
+    f = Factor(elements = elements, levels = levels)
+    return f
+
+
+f = factor(["a", "a", "b"])
+print(f.elements)  # [0, 0, 1]
+print(f.levels["b"])  # 1
+print(list(f.levels.items()))  # [('a', 0), ('b', 1)]
+
+f = factor(["a", "b", "c", "b", "a"])
+print(f.elements)  # [0, 1, 2, 1, 0]
+print(list(f.levels.items()))  # [('a', 0), ('b', 1), ('c', 2)]
 
 # Номера уровней в возвращаемом кортеже должны соответствовать порядку уникальных
 # элементов во входном списке.
