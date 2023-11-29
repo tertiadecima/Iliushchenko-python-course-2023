@@ -8,23 +8,26 @@ def build_graph(words, mismatch_percent):
     for i, word1 in enumerate(words):
         if i not in graph:
             graph[i] = []
-        for j, word2 in enumerate(words[i+1:]):
+        for j, word2 in enumerate(words[i+1:]): # переписать через индексы
             difference = 0
+
+            if len(word1) != len(word2):
+                continue
 
             for symbol1, symbol2 in zip(word1, word2):
                 if symbol1 != symbol2:
                     difference += 1
 
-            if len(word1) == len(word2) and difference < (mismatch_percent * len(word1) / 100):
+            if difference < (mismatch_percent * len(word1) / 100):
                 graph[i].append(j+1)
                 graph[j+1].append(i)
 
     return graph
 
 
-words = ["hello", "helol", "ehllo", "tiger", "field"]
-g = build_graph(words, mismatch_percent=50.)
-print(dict(g))
+# words = ["hello", "helol", "ehllo", "tiger", "field"]
+# g = build_graph(words, mismatch_percent=50.)
+# print(dict(g))
 
 
 def export_graph(graph, labels):
@@ -40,31 +43,36 @@ def export_graph(graph, labels):
     return graph_dot
 
 
-g = {0: [1, 2], 1: [0], 2: [0]}
-labels = ["a", "b", "c"]
-print(export_graph(g, labels))
+# g = {0: [1, 2], 1: [0], 2: [0]}
+# labels = ["a", "b", "c"]
+# print(export_graph(g, labels))
+
+
+def build_comp(node, graph, visited):
+    work_list = [node]
+    comp_conn = set()
+    while work_list:
+        node = work_list.pop(0)
+        comp_conn.add(node)
+        work_list.extend([element for element in graph[node] if element > node])
+        visited.append(node)
+    return comp_conn
 
 
 def find_connected_components(graph):
     visited = []
     connected_components = []
-    for key, value in graph.items():
-        list = []
-
+    for key in graph:
         if key not in visited:
-            list.append(key)
-            visited.append(key)
-            for element in value:
-                list.append(element)
-                list.extend(graph[element])
-                visited.append(element)
-            connected_components.append(set(list))
+            conn_comp = build_comp(key, graph, visited)
+            connected_components.append(conn_comp)
     return connected_components
 
 
-g = {0: [1, 2], 1: [0], 2: [0], 3: [], 4: []} # [{0, 1, 2}, {3}, {4}]
+# g = {0: [1, 2], 1: [0], 2: [0], 3: [], 4: []} # [{0, 1, 2}, {3}, {4}]
 # g = {0: [1, 2], 1: [0, 3], 2: [0], 3: [1], 4: []} # [{0, 1, 2, 3}, {4}]
-print(find_connected_components(g))
+# g = {0: [1], 1: [0, 3], 2: [5], 3: [1, 4, 6], 4: [3], 5:[2], 6:[3]} # [{0, 1, 3, 4, 6}, {2, 5}]
+# print(find_connected_components(g))
 
 
 def find_consensus(list_of_words):
