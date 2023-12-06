@@ -18,7 +18,16 @@ class Closeable(Base):
     def close(self):
         pass
 
+class MyClass:
+    baz = 42
+    def __init__(self):
+        self.foo = 42
+    def bar(self):
+        pass
 
+
+Class = MyClass()
+# print(dir(Class))
 print(peel(Closeable))  # {"some_method", "some_other_method", "close"}
 
 
@@ -28,6 +37,7 @@ def implements(interface):
         func_methods = peel(checked_func)
         for method in peel(interface):
             assert method in func_methods, f'method \'{method}\' not implemented'
+        return checked_func
     return wrapper
 
 
@@ -36,11 +46,13 @@ class Closeable:
         pass
 
 
+
 @implements(Closeable)  # гуд - пусто
 class FileReader:
     # ...
     def close(self):
         self.file.close()
+filef = FileReader()
 
 
 @implements(Closeable)  # не сработает ассерт
